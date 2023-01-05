@@ -86,6 +86,30 @@ static guac_common_ssh_user* guac_ssh_get_user(guac_client* client) {
     /* Create user object from username */
     user = guac_common_ssh_create_user(settings->username);
 
+    /* If public key specified, import */
+    if (settings->key_public != NULL) {
+
+        guac_client_log(client, GUAC_LOG_DEBUG,
+                "Attempting public key import");
+
+        /* Attempt to read key without passphrase */
+        if (guac_common_ssh_user_import_public_key(user,
+                    settings->key_public)) {
+            guac_client_abort(client,
+                    GUAC_PROTOCOL_STATUS_CLIENT_UNAUTHORIZED,
+                    "Public key import failed: %s",
+                    guac_common_ssh_key_error());
+
+            guac_common_ssh_destroy_user(user);
+            return NULL;
+        }
+
+        /* Success */
+        guac_client_log(client, GUAC_LOG_INFO,
+                "Public key successfully imported.");
+
+    }
+
     /* If key specified, import */
     if (settings->key_base64 != NULL) {
 
@@ -118,7 +142,7 @@ static guac_common_ssh_user* guac_ssh_get_user(guac_client* client) {
                 /* If still failing, give up */
                 guac_client_abort(client,
                         GUAC_PROTOCOL_STATUS_CLIENT_UNAUTHORIZED,
-                        "Auth key import failed: %s",
+                        "Private key import failed: %s",
                         guac_common_ssh_key_error());
 
                 guac_common_ssh_destroy_user(user);

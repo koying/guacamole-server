@@ -69,6 +69,7 @@ const char* GUAC_VNC_CLIENT_ARGS[] = {
     "sftp-username",
     "sftp-password",
     "sftp-private-key",
+    "sftp-public-key",
     "sftp-passphrase",
     "sftp-directory",
     "sftp-root-directory",
@@ -251,6 +252,12 @@ enum VNC_ARGS_IDX {
      * key.
      */
     IDX_SFTP_PASSPHRASE,
+
+    /**
+     * The base64-encoded public key to use when authenticating with the SSH
+     * server for SFTP.
+     */
+    IDX_SFTP_PUBLIC_KEY,
 
     /**
      * The default location for file uploads within the SSH server. This will

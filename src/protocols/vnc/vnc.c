@@ -348,6 +348,22 @@ void* guac_vnc_client_thread(void* data) {
         vnc_client->sftp_user =
             guac_common_ssh_create_user(settings->sftp_username);
 
+        /* Import public key, if given */
+        if (settings->sftp_public_key != NULL) {
+
+            guac_client_log(client, GUAC_LOG_DEBUG,
+                    "Authenticating with public key.");
+
+            /* Abort if private key cannot be read */
+            if (guac_common_ssh_user_import_public_key(vnc_client->sftp_user,
+                        settings->sftp_public_key)) {
+                guac_client_abort(client, GUAC_PROTOCOL_STATUS_SERVER_ERROR,
+                        "Public key unreadable.");
+                return NULL;
+            }
+
+        }
+
         /* Import private key, if given */
         if (settings->sftp_private_key != NULL) {
 

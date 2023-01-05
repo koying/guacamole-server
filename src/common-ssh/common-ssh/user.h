@@ -44,6 +44,11 @@ typedef struct guac_common_ssh_user {
      */
     guac_common_ssh_key* private_key;
 
+    /**
+     * The public key which should be used to authenticate this user, if any.
+     */
+    guac_common_ssh_key* public_key;
+
 } guac_common_ssh_user;
 
 /**
@@ -103,6 +108,25 @@ void guac_common_ssh_user_set_password(guac_common_ssh_user* user,
  */
 int guac_common_ssh_user_import_key(guac_common_ssh_user* user,
         char* private_key, char* passphrase);
+
+/**
+ * Imports the given public key, associating that key with the given user. If
+ * necessary to decrypt the key, a passphrase may be specified. The public key
+ * must be provided in base64 form. If the public key is imported
+ * successfully, it will be used for future authentication attempts.
+ *
+ * @param user
+ *     The user to associate with the given private key.
+ *
+ * @param public_key
+ *     The base64-encoded public key to import.
+ *
+ * @return
+ *     Zero if the private key is successfully imported, or non-zero if the
+ *     private key could not be imported due to an error.
+ */
+int guac_common_ssh_user_import_public_key(guac_common_ssh_user* user,
+        char* private_key);
 
 #endif
 
