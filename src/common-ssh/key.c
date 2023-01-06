@@ -140,9 +140,9 @@ guac_common_ssh_key* guac_common_ssh_key_alloc(char* data, int length,
     guac_common_ssh_key* key = malloc(sizeof(guac_common_ssh_key));
 
     /* Copy private key to structure */
-    key->private_key_length = length;
-    key->private_key = malloc(length);
-    memcpy(key->private_key, data, length);
+    key->key_length = length;
+    key->key_data = malloc(length);
+    memcpy(key->key_data, data, length);
     key->passphrase = strdup(passphrase);
 
     return key;
@@ -158,7 +158,7 @@ const char* guac_common_ssh_key_error() {
 
 void guac_common_ssh_key_free(guac_common_ssh_key* key) {
 
-    free(key->private_key);
+    free(key->key_data);
     free(key->passphrase);
     free(key);
 }

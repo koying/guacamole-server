@@ -320,8 +320,10 @@ static int guac_common_ssh_authenticate(guac_common_ssh_session* common_session)
 
         /* Attempt public key auth */
         if (libssh2_userauth_publickey_frommemory(session, user->username,
-                    username_len, pubkey->private_key, pubkey->private_key_length, key->private_key,
-                    key->private_key_length, key->passphrase)) {
+                    username_len, 
+                    (pubkey != NULL ? pubkey->key_data : NULL), 
+                    (pubkey != NULL ? pubkey->key_length : 0), 
+                    key->key_data, key->key_length, key->passphrase)) {
 
             /* Abort on failure */
             char* error_message;

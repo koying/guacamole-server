@@ -49,12 +49,12 @@ typedef struct guac_common_ssh_key {
     /**
      * The private key, encoded as necessary for SSH.
      */
-    char* private_key;
+    char* key_data;
 
     /**
      * The length of the private key, in bytes.
      */
-    int private_key_length;
+    int key_length;
 
     /**
      * The private key's passphrase, if any.
